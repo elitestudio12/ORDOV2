@@ -220,7 +220,60 @@ html,body{height:100%;font-family:'Cairo','Tajawal',sans-serif;direction:rtl;bac
 /* TOAST */
 .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);color:var(--w);padding:.9rem 2rem;border-radius:50px;font-size:.85rem;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.2);transition:transform .4s cubic-bezier(.34,1.56,.64,1);z-index:9999;display:flex;align-items:center;gap:.6rem;white-space:nowrap}
 .toast.show{transform:translateX(-50%) translateY(0)}
-@media(max-width:900px){.sb{display:none}.main{margin-right:0}.p-layout,.scan-grid{grid-template-columns:1fr}.sc-card.full{grid-column:span 1}.frow{grid-template-columns:1fr}}
+/* HAMBURGER + OVERLAY */
+.ham-btn{display:none;width:42px;height:42px;border-radius:10px;border:1.5px solid var(--b);background:var(--off);align-items:center;justify-content:center;cursor:pointer;color:var(--text);font-size:1.05rem;flex-shrink:0}
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:98;backdrop-filter:blur(2px)}
+
+@media(max-width:900px){
+  .sb{transform:translateX(110%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  .sb.mob-open{transform:translateX(0);box-shadow:-6px 0 28px rgba(0,0,0,.35)}
+  .main{margin-right:0}
+  .ham-btn{display:flex!important}
+  .p-layout,.scan-grid{grid-template-columns:1fr}
+  .sc-card.full{grid-column:span 1}
+  .frow{grid-template-columns:1fr}
+  .topbar{padding:0 1.2rem}
+}
+
+@media(max-width:580px){
+  /* inputs */
+  .field{font-size:16px!important}
+  /* buttons */
+  .save-btn{width:100%;justify-content:center;min-height:48px}
+  /* content */
+  .content{padding:1.2rem 1rem}
+  /* welcome banner */
+  .welcome-bar{padding:1.5rem;border-radius:14px}
+  .welcome-title{font-size:1.2rem}
+  .welcome-sub{font-size:.78rem}
+  /* quick cards */
+  .qcards{grid-template-columns:repeat(2,1fr);gap:.8rem}
+  .qc{padding:1.1rem}
+  .qc-ico{width:40px;height:40px;font-size:1rem;margin-bottom:.7rem}
+  .qc h4{font-size:.8rem}
+  .qc p{font-size:.7rem}
+  /* activity list */
+  .act-item{padding:.8rem 1rem;gap:.7rem}
+  .act-ico{width:34px;height:34px;font-size:.85rem}
+  /* wallet */
+  .flip-scene{height:185px}
+  .flip-card{width:min(340px,92vw);height:min(200px,54vw)}
+  .w-tabs{gap:.3rem}
+  .wtab{font-size:.68rem;padding:.4rem .3rem}
+  .wtab i{font-size:.9rem}
+  .w-actions{flex-direction:column;gap:.6rem}
+  .w-save-btn{width:100%;justify-content:center}
+  /* scan */
+  .scan-zone{padding:1.5rem 1rem}
+  .sc-mtabs{flex-wrap:wrap;gap:.4rem}
+  .sm{font-size:.72rem}
+  /* profile */
+  .p-av-wrap{margin-bottom:.8rem}
+  .p-stats{grid-template-columns:1fr 1fr}
+  .topbar{height:52px}
+  .topbar-title{font-size:1rem}
+  .notif-btn{width:34px;height:34px}
+}
 </style>
 </head>
 <body>
@@ -1142,6 +1195,25 @@ function applyAv(src){
   if(pa)pa.style.display='none'; if(pi){pi.src=src;pi.style.display='block';}
 }
 document.addEventListener('click',function(e){ if(e.target===g('av-modal'))closeAvModal(); });
+</script>
+
+<div class="sb-overlay" id="__overlay" onclick="toggleSidebar()"></div>
+<script>
+function toggleSidebar(){
+  var sb=document.querySelector('.sb'),ov=document.getElementById('__overlay');
+  var open=sb.classList.toggle('mob-open');
+  ov.style.display=open?'block':'none';
+  document.body.style.overflow=open?'hidden':'';
+}
+document.querySelectorAll('.ni').forEach(function(ni){
+  ni.addEventListener('click',function(){
+    if(window.innerWidth<=900){
+      document.querySelector('.sb').classList.remove('mob-open');
+      document.getElementById('__overlay').style.display='none';
+      document.body.style.overflow='';
+    }
+  });
+});
 </script>
 </body>
 </html>

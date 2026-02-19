@@ -145,8 +145,58 @@ html,body{height:100%;font-family:'Cairo','Tajawal',sans-serif;direction:rtl;bac
 /* TOAST */
 .toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(90px);color:var(--w);padding:.72rem 1.5rem;border-radius:50px;font-size:.79rem;font-weight:700;box-shadow:0 6px 20px rgba(0,0,0,.2);transition:transform .38s cubic-bezier(.34,1.56,.64,1);z-index:999;display:flex;align-items:center;gap:.45rem;white-space:nowrap}
 .toast.show{transform:translateX(-50%) translateY(0)}
-@media(max-width:860px){.sb{display:none}.main{margin-right:0}}
-@media(max-width:580px){.svc-grid{grid-template-columns:repeat(2,1fr)}.content{padding:1rem}.time-grid{grid-template-columns:repeat(3,1fr)}.frow{grid-template-columns:1fr}.doc-type-grid{grid-template-columns:1fr}}
+/* HAMBURGER + OVERLAY */
+.ham-btn{display:none;width:42px;height:42px;border-radius:10px;border:1.5px solid var(--b);background:var(--w);align-items:center;justify-content:center;cursor:pointer;color:var(--text);font-size:1.05rem;flex-shrink:0}
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:98;backdrop-filter:blur(2px)}
+
+@media(max-width:860px){
+  .sb{transform:translateX(110%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  .sb.mob-open{transform:translateX(0);box-shadow:-6px 0 28px rgba(0,0,0,.35)}
+  .main{margin-right:0}
+  .ham-btn{display:flex!important}
+  .topbar{padding:0 1rem}
+  .wil-badge{display:none}
+}
+
+@media(max-width:580px){
+  .content{padding:1rem}
+  /* forms */
+  .field{font-size:16px!important}
+  select.field{font-size:16px!important}
+  .frow{grid-template-columns:1fr}
+  /* service grid */
+  .svc-grid{grid-template-columns:repeat(2,1fr)}
+  .svc-card{padding:.7rem .3rem}
+  .svc-card i{font-size:1rem}
+  .svc-card span{font-size:.65rem}
+  /* buttons */
+  .btn{min-height:48px}
+  .btn-row{flex-direction:column}
+  .btn-row .btn{width:100%}
+  /* calendar */
+  .cal-day{font-size:.68rem;min-height:30px;padding:.3rem .1rem;border-radius:5px}
+  .cal-day-hdr{font-size:.58rem;padding:.2rem 0}
+  .cal-grid{gap:.2rem}
+  /* time slots */
+  .time-grid{grid-template-columns:repeat(3,1fr)}
+  .ts{font-size:.7rem;padding:.48rem .1rem}
+  /* cards */
+  .card{padding:1.1rem}
+  .card h3{font-size:.9rem}
+  /* tabs */
+  .mtab{font-size:.73rem;padding:.58rem .4rem}
+  /* doc grid */
+  .doc-type-grid{grid-template-columns:1fr}
+  /* my appts */
+  .ac{flex-wrap:wrap;gap:.5rem}
+  .ac-meta{display:flex;align-items:center;gap:.6rem;width:100%;justify-content:space-between}
+  .ac-ico{width:38px;height:38px;font-size:.95rem}
+  /* wizard */
+  .wiz{margin-bottom:.9rem}
+  /* topbar */
+  .topbar{height:52px}
+  .tb-title{font-size:.95rem}
+}
 </style>
 </head>
 <body>
@@ -180,6 +230,7 @@ html,body{height:100%;font-family:'Cairo','Tajawal',sans-serif;direction:rtl;bac
 <!-- MAIN -->
 <div class="main">
   <div class="topbar">
+    <button class="ham-btn" onclick="toggleSidebar()" aria-label="القائمة"><i class="fas fa-bars"></i></button>
     <span class="tb-title" id="tb-title">حجز موعد</span>
     <div class="wil-badge"><i class="fas fa-location-dot"></i><span id="top-wil">—</span></div>
   </div>
@@ -1360,6 +1411,25 @@ function renderMyDocs(){
       +'</div>';
   }).join('');
 }
+</script>
+
+<div class="sb-overlay" id="__overlay" onclick="toggleSidebar()"></div>
+<script>
+function toggleSidebar(){
+  var sb=document.querySelector('.sb'),ov=document.getElementById('__overlay');
+  var open=sb.classList.toggle('mob-open');
+  ov.style.display=open?'block':'none';
+  document.body.style.overflow=open?'hidden':'';
+}
+document.querySelectorAll('.ni').forEach(function(ni){
+  ni.addEventListener('click',function(){
+    if(window.innerWidth<=860){
+      document.querySelector('.sb').classList.remove('mob-open');
+      document.getElementById('__overlay').style.display='none';
+      document.body.style.overflow='';
+    }
+  });
+});
 </script>
 </body>
 </html>
